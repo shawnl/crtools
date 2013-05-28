@@ -17,7 +17,7 @@
 
 #include "syscall.h"
 #include "files.h"
-#include "crtools.h"
+#include "criu.h"
 #include "image.h"
 #include "util.h"
 #include "log.h"

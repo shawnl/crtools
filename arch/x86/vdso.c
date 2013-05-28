@@ -12,7 +12,7 @@
 #include "asm/types.h"
 
 #include "compiler.h"
-#include "crtools.h"
+#include "criu.h"
 #include "kerndat.h"
 #include "vdso.h"
 #include "util.h"

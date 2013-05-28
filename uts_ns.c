@@ -4,7 +4,7 @@
 #include <string.h>
 
 #include "util.h"
-#include "crtools.h"
+#include "criu.h"
 #include "syscall.h"
 #include "namespaces.h"
 #include "sysctl.h"

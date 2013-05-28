@@ -1,7 +1,7 @@
 #ifndef __CR_NS_H__
 #define __CR_NS_H__
 
-#include "crtools.h"
+#include "criu.h"
 #include "pstree.h"
 #include "files.h"
 

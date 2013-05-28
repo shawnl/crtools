@@ -13,7 +13,7 @@
 #include <sys/un.h>
 #include <stdlib.h>
 
-#include "crtools.h"
+#include "criu.h"
 
 #include "files.h"
 #include "file-ids.h"

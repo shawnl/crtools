@@ -21,7 +21,7 @@
 #include "image.h"
 #include "sk-inet.h"
 
-#include "crtools.h"
+#include "criu.h"
 #include "lock.h"
 #include "restorer.h"
 

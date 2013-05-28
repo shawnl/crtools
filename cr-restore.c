@@ -46,7 +46,7 @@
 #include "signalfd.h"
 #include "proc_parse.h"
 #include "restorer-blob.h"
-#include "crtools.h"
+#include "criu.h"
 #include "namespaces.h"
 #include "shmem.h"
 #include "mount.h"

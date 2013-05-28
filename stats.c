@@ -2,7 +2,7 @@
 #include <sys/time.h>
 #include "protobuf.h"
 #include "stats.h"
-#include "crtools.h"
+#include "criu.h"
 #include "protobuf/stats.pb-c.h"
 
 struct timing {

@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <unistd.h>
 
-#include "crtools.h"
+#include "criu.h"
 #include "page-read.h"
 
 #include "protobuf.h"

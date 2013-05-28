@@ -7,7 +7,7 @@
 #include "compiler.h"
 #include "asm/types.h"
 #include "files.h"
-#include "crtools.h"
+#include "criu.h"
 
 extern int is_eventpoll_link(int lfd);
 extern int dump_eventpoll(struct fd_parms *p, int lfd, const int fdinfo);

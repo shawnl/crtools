@@ -1,7 +1,7 @@
 #ifndef __CR_UTS_NS_H__
 #define __CR_UTS_NS_H__
 
-#include "crtools.h"
+#include "criu.h"
 
 int dump_uts_ns(int ns_pid, struct cr_fdset *fdset);
 struct cr_options;

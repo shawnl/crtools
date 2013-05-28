@@ -11,7 +11,7 @@
 #include "image.h"
 #include "lock.h"
 #include "util.h"
-#include "crtools.h"
+#include "criu.h"
 #include "asm/restorer.h"
 
 #include "vdso.h"

@@ -34,7 +34,7 @@
 #include "list.h"
 #include "util.h"
 
-#include "crtools.h"
+#include "criu.h"
 
 #define VMA_OPT_LEN	128
 

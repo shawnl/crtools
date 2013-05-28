@@ -18,7 +18,7 @@
 #include "util-net.h"
 #include "sk-packet.h"
 #include "namespaces.h"
-#include "crtools.h"
+#include "criu.h"
 #include "net.h"
 
 #ifndef NETLINK_SOCK_DIAG

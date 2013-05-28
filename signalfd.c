@@ -6,7 +6,7 @@
 #include "asm/types.h"
 #include "signalfd.h"
 #include "proc_parse.h"
-#include "crtools.h"
+#include "criu.h"
 #include "image.h"
 #include "util.h"
 #include "log.h"

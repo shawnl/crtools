@@ -12,7 +12,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-#include "crtools.h"
+#include "criu.h"
 #include "asm/types.h"
 #include "util.h"
 #include "log.h"

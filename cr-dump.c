@@ -35,7 +35,7 @@
 #include "file-ids.h"
 #include "kcmp-ids.h"
 #include "compiler.h"
-#include "crtools.h"
+#include "criu.h"
 #include "syscall.h"
 #include "ptrace.h"
 #include "util.h"

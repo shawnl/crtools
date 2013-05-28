@@ -13,7 +13,7 @@
 #include "asm/types.h"
 #include "list.h"
 #include "image.h"
-#include "crtools.h"
+#include "criu.h"
 #include "util.h"
 #include "util-net.h"
 #include "sockets.h"

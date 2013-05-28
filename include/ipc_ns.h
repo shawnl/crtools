@@ -1,7 +1,7 @@
 #ifndef __CR_IPC_NS_H__
 #define __CR_IPC_NS_H__
 
-#include "crtools.h"
+#include "criu.h"
 
 struct cr_options;
 extern void show_ipc_var(int fd);

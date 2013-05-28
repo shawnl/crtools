@@ -18,7 +18,7 @@
 #include "parasite-syscall.h"
 #include "parasite-blob.h"
 #include "parasite.h"
-#include "crtools.h"
+#include "criu.h"
 #include "namespaces.h"
 #include "kerndat.h"
 #include "pstree.h"

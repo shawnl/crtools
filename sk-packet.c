@@ -4,7 +4,7 @@
 #include <linux/rtnetlink.h>
 #include <unistd.h>
 #include <string.h>
-#include "crtools.h"
+#include "criu.h"
 #include "asm/types.h"
 #include "files.h"
 #include "sockets.h"

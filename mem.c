@@ -3,7 +3,7 @@
 #include <sys/mman.h>
 #include <errno.h>
 
-#include "crtools.h"
+#include "criu.h"
 #include "mem.h"
 #include "parasite-syscall.h"
 #include "parasite.h"

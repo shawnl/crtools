@@ -1,6 +1,6 @@
 #include <unistd.h>
 #include <stdarg.h>
-#include "crtools.h"
+#include "criu.h"
 #include "image.h"
 #include "eventpoll.h"
 #include "signalfd.h"

@@ -16,7 +16,7 @@
 #include "asm/types.h"
 #include "eventfd.h"
 #include "proc_parse.h"
-#include "crtools.h"
+#include "criu.h"
 #include "image.h"
 #include "util.h"
 #include "log.h"

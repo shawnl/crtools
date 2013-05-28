@@ -2,7 +2,7 @@
 #define __CR_PSTREE_H__
 
 #include "list.h"
-#include "crtools.h"
+#include "criu.h"
 #include "protobuf/core.pb-c.h"
 
 /*

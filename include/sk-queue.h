@@ -3,7 +3,7 @@
 
 #include "asm/types.h"
 #include "list.h"
-#include "crtools.h"
+#include "criu.h"
 #include "image.h"
 
 extern int read_sk_queues(void);

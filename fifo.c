@@ -4,7 +4,7 @@
 #include <fcntl.h>
 #include <stdlib.h>
 
-#include "crtools.h"
+#include "criu.h"
 #include "image.h"
 #include "files.h"
 #include "files-reg.h"

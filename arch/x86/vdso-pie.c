@@ -13,7 +13,7 @@
 #include "asm/types.h"
 
 #include "compiler.h"
-#include "crtools.h"
+#include "criu.h"
 #include "vdso.h"
 #include "log.h"
 

@@ -8,7 +8,7 @@
 
 #include <google/protobuf-c/protobuf-c.h>
 
-#include "crtools.h"
+#include "criu.h"
 #include "compiler.h"
 #include "asm/types.h"
 #include "log.h"

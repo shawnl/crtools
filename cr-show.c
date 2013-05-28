@@ -16,7 +16,7 @@
 #include "list.h"
 #include "namespaces.h"
 #include "compiler.h"
-#include "crtools.h"
+#include "criu.h"
 #include "util.h"
 #include "sockets.h"
 #include "image.h"

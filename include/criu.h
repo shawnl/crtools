@@ -1,5 +1,5 @@
-#ifndef __CR_CRTOOLS_H__
-#define __CR_CRTOOLS_H__
+#ifndef __CR_CRIU_H__
+#define __CR_CRIU_H__
 
 #include <sys/types.h>
 
@@ -302,4 +302,4 @@ static inline int in_vma_area(struct vma_area *vma, unsigned long addr)
 		addr < (unsigned long)vma->vma.end;
 }
 
-#endif /* __CR_CRTOOLS_H__ */
+#endif /* __CR_CRIU_H__ */

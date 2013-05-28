@@ -1,6 +1,6 @@
 #include <unistd.h>
 #include <string.h>
-#include "crtools.h"
+#include "criu.h"
 #include "ptrace.h"
 #include "parasite-syscall.h"
 
