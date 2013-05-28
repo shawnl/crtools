@@ -4,7 +4,7 @@ targets		+= criu
 SYS-ASM		:= syscalls.S
 
 syscalls-asm-y	+= $(SYS-ASM:.S=).o
-criu-obj-y	+= crtools.o
+criu-obj-y	+= criu.o
 criu-obj-y	+= cpu.o
 
 SYS-DEF		:= syscall.def
