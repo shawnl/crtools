@@ -251,7 +251,7 @@ static int init(struct parasite_init_args *args)
 	return 0;
 }
 
-static char proc_mountpoint[] = "proc.crtools";
+static char proc_mountpoint[] = "proc.criu";
 static int parasite_get_proc_fd()
 {
 	int ret, fd = -1;

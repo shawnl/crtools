@@ -92,7 +92,7 @@ static int shmem_remap(void *old_addr, void *new_addr, unsigned long size)
 	return 0;
 }
 
-static int crtools_prepare_shared(struct cr_options *opts)
+static int criu_prepare_shared(struct cr_options *opts)
 {
 	if (prepare_shared_fdinfo())
 		return -1;
@@ -1016,7 +1016,7 @@ static void restore_pgid(void)
 static int mount_proc(void)
 {
 	int ret;
-	char proc_mountpoint[] = "crtools-proc.XXXXXX";
+	char proc_mountpoint[] = "criu-proc.XXXXXX";
 
 	if (mkdtemp(proc_mountpoint) == NULL) {
 		pr_perror("mkdtemp failed %s", proc_mountpoint);
@@ -1326,7 +1326,7 @@ int cr_restore_tasks(struct cr_options *opts)
 	if (prepare_pstree() < 0)
 		return -1;
 
-	if (crtools_prepare_shared(opts) < 0)
+	if (criu_prepare_shared(opts) < 0)
 		return -1;
 
 	return restore_root_task(root_item, opts);

@@ -338,7 +338,7 @@ static int gen_parasite_saddr(struct sockaddr_un *saddr, int key)
 
 	saddr->sun_family = AF_UNIX;
 	snprintf(saddr->sun_path, UNIX_PATH_MAX,
-			"X/crtools-pr-%d", key);
+			"X/criu-pr-%d", key);
 
 	sun_len = SUN_LEN(saddr);
 	*saddr->sun_path = '\0';
