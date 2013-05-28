@@ -94,7 +94,7 @@ endif
 
 CFLAGS		+= $(WARNINGS) $(DEFINES)
 SYSCALL-LIB	:= arch/$(ARCH)/syscalls.built-in.o
-ARCH-LIB	:= arch/$(ARCH)/crtools.built-in.o
+ARCH-LIB	:= arch/$(ARCH)/criu.built-in.o
 
 export CC MAKE CFLAGS LIBS ARCH DEFINES MAKEFLAGS
 export SRC_DIR SYSCALL-LIB SH RM ARCH_DIR OBJCOPY LDARCH LD
@@ -108,7 +108,7 @@ include scripts/Makefile.rules
 #
 # shorthand
 build := -r -R -f scripts/Makefile.build makefile=Makefile obj
-build-crtools := -r -R -f scripts/Makefile.build makefile=Makefile.crtools obj
+build-criu := -r -R -f scripts/Makefile.build makefile=Makefile.criu obj
 
 PROGRAM		:= criu
 
@@ -138,9 +138,9 @@ pie: arch/$(ARCH)
 	$(Q) $(MAKE) $(build)=pie all
 
 %.o %.i %.s %.d: $(VERSION_HEADER) pie
-	$(Q) $(MAKE) $(build-crtools)=. $@
+	$(Q) $(MAKE) $(build-criu)=. $@
 built-in.o: $(VERSION_HEADER) pie
-	$(Q) $(MAKE) $(build-crtools)=. $@
+	$(Q) $(MAKE) $(build-criu)=. $@
 
 PROGRAM-BUILTINS	+= pie/util-net.o
 PROGRAM-BUILTINS	+= protobuf/built-in.o
@@ -165,7 +165,7 @@ clean-built:
 	$(Q) $(MAKE) $(build)=arch/$(ARCH) clean
 	$(Q) $(MAKE) $(build)=protobuf clean
 	$(Q) $(MAKE) $(build)=pie clean
-	$(Q) $(MAKE) $(build-crtools)=. clean
+	$(Q) $(MAKE) $(build-criu)=. clean
 	$(Q) $(MAKE) -C Documentation clean
 	$(Q) $(RM) ./include/config.h
 	$(Q) $(RM) ./$(PROGRAM)
@@ -239,12 +239,12 @@ gcov:
 	$(E) " GCOV"
 	$(Q) mkdir gcov && \
 	cd gcov && \
-	cp ../*.gcno ../*.c ../test/root/crtools/	&& \
-	geninfo --no-checksum  --output-filename crtools.l.info --no-recursion .. && \
-	geninfo --no-checksum  --output-filename crtools.ns.info --no-recursion ../test/root/crtools && \
-	sed -i 's#/test/root/crtools##' crtools.ns.info && \
-	lcov -a crtools.l.info -a crtools.ns.info -o crtools.info && \
-	genhtml -o html crtools.info
+	cp ../*.gcno ../*.c ../test/root/criu/	&& \
+	geninfo --no-checksum  --output-filename criu.l.info --no-recursion .. && \
+	geninfo --no-checksum  --output-filename criu.ns.info --no-recursion ../test/root/criu && \
+	sed -i 's#/test/root/criu##' criu.ns.info && \
+	lcov -a criu.l.info -a criu.ns.info -o criu.info && \
+	genhtml -o html criu.info
 .PHONY: gcov
 
 .DEFAULT_GOAL	:= all

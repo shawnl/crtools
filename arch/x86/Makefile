@@ -1,12 +1,12 @@
 targets		+= syscalls
-targets		+= crtools
+targets		+= criu
 
 SYS-ASM		:= syscalls.S
 
 syscalls-asm-y	+= $(SYS-ASM:.S=).o
-crtools-obj-y	+= crtools.o
-crtools-obj-y	+= cpu.o
-crtools-obj-y	+= prlimit.o
+criu-obj-y	+= crtools.o
+criu-obj-y	+= cpu.o
+criu-obj-y	+= prlimit.o
 
 SYS-DEF		:= syscall-x86-64.def
 SYS-ASM-COMMON	:= syscall-common-x86-64.S
