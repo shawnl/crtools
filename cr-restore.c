@@ -1712,9 +1712,9 @@ static unsigned long decode_rlim(u_int64_t ival)
 
 static int prepare_rlimits(int pid, struct task_restore_core_args *ta)
 {
-	int fd, ret;
+	int fd, ret, nr_rlim;
 
-	ta->nr_rlim = 0;
+	ta->nr_rlim = nr_rlim = 0;
 
 	fd = open_image(CR_FD_RLIMIT, O_RSTR, pid);
 	if (fd < 0) {
@@ -1727,31 +1727,32 @@ static int prepare_rlimits(int pid, struct task_restore_core_args *ta)
 	}
 
 	while (1) {
-		int l;
 		RlimitEntry *re;
 
 		ret = pb_read_one_eof(fd, &re, PB_RLIMIT);
 		if (ret <= 0)
 			break;
 
-		l = ta->nr_rlim;
-		if (l == RLIM_NLIMITS) {
-			pr_err("Too many rlimits in image for %d\n", pid);
-			ret = -1;
-			break;
-		}
+		if (nr_rlim < RLIM_NLIMITS) {
+			struct rlimit *r = &ta->rlims[nr_rlim];
 
-		ta->rlims[l].rlim_cur = decode_rlim(re->cur);
-		ta->rlims[l].rlim_max = decode_rlim(re->max);
-		if (ta->rlims[l].rlim_cur > ta->rlims[l].rlim_max) {
-			pr_err("Can't restore cur > max for %d.%d\n", pid, l);
-			ta->rlims[l].rlim_cur = ta->rlims[l].rlim_max;
+			r->rlim_cur = decode_rlim(re->cur);
+			r->rlim_max = decode_rlim(re->max);
+			if (r->rlim_cur > r->rlim_max) {
+				pr_err("Can't restore cur > max for %d.%d\n",
+				       pid, nr_rlim);
+				r->rlim_cur = r->rlim_max;
+			}
+		} else {
+			pr_warn("Resource limit %d ignored for %d\n",
+				nr_rlim, pid);
 		}
 
 		rlimit_entry__free_unpacked(re, NULL);
-
-		ta->nr_rlim++;
+		nr_rlim++;
 	}
+
+	ta->nr_rlim = min(nr_rlim, RLIM_NLIMITS);
 
 	close(fd);
 	return ret;
