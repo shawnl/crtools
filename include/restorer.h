@@ -133,6 +133,9 @@ struct task_restore_core_args {
 
 	struct vdso_symtable		vdso_sym_rt;		/* runtime vdso symbols */
 	unsigned long			vdso_rt_parked_at;	/* safe place to keep vdso */
+
+	bool				has_sas;
+	ThreadSasEntry			sas;
 } __aligned(sizeof(long));
 
 #define SHMEMS_SIZE	4096

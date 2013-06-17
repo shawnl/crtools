@@ -2031,6 +2031,13 @@ static int sigreturn_restore(pid_t pid, CoreEntry *core)
 	if (prepare_rlimits(pid, task_args))
 		goto err;
 
+	if (core->sas) {
+		task_args->has_sas = true;
+		task_args->sas = *core->sas;
+	} else {
+		task_args->has_sas = false;
+	}
+
 	/*
 	 * Fill up per-thread data.
 	 */

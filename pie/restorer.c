@@ -733,6 +733,15 @@ long __export_restore_task(struct task_restore_core_args *args)
 		goto core_restore_end;
 
 	/*
+	 * FIXME
+	 * Alternative signal stack for the group leader
+	 * is setting up separately from the threads.
+	 * This better should be unified one day.
+	 */
+	if (args->has_sas)
+		setup_sas(rt_sigframe, &args->sas);
+
+	/*
 	 * Threads restoration. This requires some more comments. This
 	 * restorer routine and thread restorer routine has the following
 	 * memory map, prepared by a caller code.
