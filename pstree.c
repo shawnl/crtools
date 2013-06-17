@@ -23,6 +23,7 @@ void core_entry_free(CoreEntry *core)
 		xfree(core->thread_core);
 		xfree(core->tc);
 		xfree(core->ids);
+		xfree(core->sas);
 	}
 }
 
@@ -30,11 +31,18 @@ CoreEntry *core_entry_alloc(int alloc_thread_info, int alloc_tc)
 {
 	CoreEntry *core;
 	TaskCoreEntry *tc;
+	ThreadSasEntry *sas;
 
 	core = xmalloc(sizeof(*core));
 	if (!core)
 		return NULL;
 	core_entry__init(core);
+
+	sas = xmalloc(sizeof(*sas));
+	if (!sas)
+		goto err;
+	thread_sas_entry__init(sas);
+	core->sas = sas;
 
 	core->mtype = CORE_ENTRY__MARCH;
 
