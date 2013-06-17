@@ -94,6 +94,7 @@ TST_NOFILE	=				\
 		child_opened_proc		\
 		posix_timers			\
 		sigpending			\
+		sigaltstack			\
 		sk-netlink			\
 		mem-touch			\
 #		jobctl00			\
@@ -228,6 +229,7 @@ inotify_system_nodel:	override CFLAGS += -DNODEL
 pthread00:		override LDLIBS += -pthread
 pthread01:		override LDLIBS += -pthread
 sigpending:		override LDLIBS += -pthread
+sigaltstack:		override LDLIBS += -pthread
 shm:			override CFLAGS += -DNEW_IPC_NS
 msgque:			override CFLAGS += -DNEW_IPC_NS
 sem:			override CFLAGS += -DNEW_IPC_NS
