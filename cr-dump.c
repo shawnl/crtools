@@ -1636,6 +1636,7 @@ err:
 
 int cr_dump_tasks(pid_t pid)
 {
+	bool post_dump_exit = false;
 	struct pstree_item *item;
 	int ret = -1;
 
@@ -1717,15 +1718,43 @@ int cr_dump_tasks(pid_t pid)
 err:
 	close_cr_fdset(&glob_fdset);
 
+	if (!ret) {
+		/*
+		 * It might be a migration case, where we're asked
+		 * to dump everything, then some script transfer
+		 * image on a new node and we're supposed to kill
+		 * dumpee because it continue running somewhere
+		 * else.
+		 *
+		 * Thus ask user via script if we're to break
+		 * checkpoint. Note if a special return code
+		 * obtained, we don't treat the result as error
+		 * case but unlock
+		 */
+		ret = run_scripts("post-dump");
+		if (ret > 0) {
+			ret = WEXITSTATUS(ret);
+			if (ret == 32) {
+				pr_msg("Post dump script passed with %d\n", ret);
+				post_dump_exit = true;
+				ret = 0;
+			} else {
+				pr_msg("Post dump script passed with %d\n", ret);
+				ret = -1;
+			}
+		}
+	}
+
 	/*
 	 * If we've failed to do anything -- unlock all TCP sockets
 	 * so that the connections can go on. But if we succeeded --
 	 * don't, just close them silently.
 	 */
-	if (ret)
+	if (ret || post_dump_exit)
 		network_unlock();
 	pstree_switch_state(root_item,
-			ret ? TASK_ALIVE : opts.final_state);
+			    (ret || post_dump_exit) ?
+			    TASK_ALIVE : opts.final_state);
 	timing_stop(TIME_FROZEN);
 	free_pstree(root_item);
 	free_file_locks();
