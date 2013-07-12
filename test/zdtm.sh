@@ -153,6 +153,8 @@ sk-netlink
 CRIU=$(readlink -f `dirname $0`/../criu)
 CRIU_CPT=$CRIU
 TMP_TREE=""
+SCRIPTDIR=`dirname $CRIU`/test
+POSTDUMP="--action-script $SCRIPTDIR/post-dump.sh"
 
 test -x $CRIU || {
 	echo "$CRIU is unavailable"
@@ -374,6 +376,7 @@ EOF
 		DUMP_PATH=`pwd`/$ddump
 		echo Dump $PID
 		mkdir -p $ddump
+		CONT=$(expr " $ARGS" : ' -s')
 
 		if [ $PAGE_SERVER -eq 1 ]; then
 			$CRIU page-server -D $ddump -o page_server.log -v4 --port $PS_PORT --daemon
@@ -389,21 +392,34 @@ EOF
 
 		save_fds $PID  $ddump/dump.fd
 		setsid $CRIU_CPT dump $opts --file-locks --tcp-established $linkremap \
-			-x --evasive-devices -D $ddump -o dump.log -v4 -t $PID $args $ARGS $snapopt || {
-			echo WARNING: process $tname is left running for your debugging needs
-			return 1
-		}
+			-x --evasive-devices -D $ddump -o dump.log -v4 -t $PID $args $ARGS $snapopt
+		retcode=$?
+
+		#
+		# Here we may have two cases: either checkpoint is failed
+		# with some error code, or checkpoint is complete but return
+		# code is non-zero because of post dump action.
+		if [ $retcode -ne 0 ]; then
+			if [ $retcode -ne 32 ]; then
+				echo WARNING: $tname returned $retcode and left running for debug needs
+				return 1
+			fi
+		fi
 
 		if [ -n "$SNAPSHOT" ]; then
 			snappdir=../`basename $ddump`
 			[ "$i" -ne "$ITERATIONS" ] && continue
+			#
+			# Don't forget to kill and restore on
+			# the last iteration.
+			CONT=0
 		fi
 
 		if [ $PAGE_SERVER -eq 1 ]; then
 			wait $PS_PID
 		fi
 
-		if expr " $ARGS" : ' -s' > /dev/null; then
+		if [ $CONT -ne 0 ]; then
 			save_fds $PID  $ddump/dump.fd.after
 			diff_fds $ddump/dump.fd $ddump/dump.fd.after || return 1
 			killall -CONT $tname
@@ -499,7 +515,7 @@ cd `dirname $0` || exit 1
 
 while :; do
 	if [ "$1" = "-d" ]; then
-		ARGS="-s"
+		ARGS="-s $POSTDUMP"
 		shift
 		continue
 	fi
@@ -554,6 +570,7 @@ while :; do
 	fi
 	if [ "$1" = "-s" ]; then
 		SNAPSHOT=1
+		ARGS="-s $POSTDUMP"
 		shift
 		continue
 	fi
