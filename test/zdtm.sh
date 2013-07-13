@@ -500,7 +500,7 @@ cd `dirname $0` || exit 1
 while :; do
 	if [ "$1" = "-d" ]; then
 		script=`dirname $CRIU`/test/post-dump.sh
-		ARGS="--action-script $script"
+		ARGS="-s --action-script $script"
 		shift
 		continue
 	fi
