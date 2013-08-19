@@ -1,14 +1,3 @@
-#include "zdtmtst.h"
-
-#ifdef ZDTM_IPV6
-#define ZDTM_FAMILY AF_INET6
-#else
-#define ZDTM_FAMILY AF_INET
-#endif
-
-const char *test_doc = "Check full tcp buffers with custom sizes\n";
-const char *test_author = "Andrey Vagin <avagin@parallels.com";
-
 #include <stdio.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -20,16 +9,27 @@ const char *test_author = "Andrey Vagin <avagin@parallels.com";
 #include <sys/socket.h>
 #include <netinet/tcp.h>
 
+#include "zdtmtst.h"
+
+#ifdef ZDTM_IPV6
+#define ZDTM_FAMILY AF_INET6
+#else
+#define ZDTM_FAMILY AF_INET
+#endif
+
+const char *test_doc = "Check full tcp buffers with custom sizes\n";
+const char *test_author = "Andrey Vagin <avagin@parallels.com";
+
 static int port = 8880;
 
-#define BUF_SIZE 4096
-#define TCP_MAX_BUF (100 << 20)
+#define TCP_MAX_BUF	(100 << 20)
+#define BUF_SIZE	4096
+
+static const char data_chunk[] = "oQuoapujav7uca4maebahk7zah0thih";
 
 static int fill_sock_buf(int fd)
 {
-	int flags;
-	int size;
-	int ret;
+	int flags, size, ret;
 
 	flags = fcntl(fd, F_GETFL, 0);
 	if (flags == -1) {
@@ -43,8 +43,7 @@ static int fill_sock_buf(int fd)
 
 	size = 0;
 	while (1) {
-		char zdtm[] = "zdtm test packet";
-		ret = write(fd, zdtm, sizeof(zdtm));
+		ret = write(fd, data_chunk, sizeof(data_chunk));
 		if (ret == -1) {
 			if (errno == EAGAIN)
 				break;
@@ -64,10 +63,10 @@ static int fill_sock_buf(int fd)
 	return size;
 }
 
-static int clean_sk_buf(fd)
+static int read_sock_buf(fd)
 {
-	int size, ret;
 	char buf[BUF_SIZE];
+	int size, ret;
 
 	size = 0;
 	while (1) {
@@ -75,11 +74,8 @@ static int clean_sk_buf(fd)
 		if (ret == -1) {
 			err("read");
 			return -11;
-		}
-
-		if (ret == 0)
+		} else if (ret == 0)
 			break;
-
 		size += ret;
 	}
 
@@ -90,26 +86,26 @@ static int clean_sk_buf(fd)
 
 int main(int argc, char **argv)
 {
-	int fd, fd_s, ctl_fd;
-	pid_t extpid;
-	int pfd[2];
-	int sk_bsize;
 	int ret, snd_size, rcv_size;
+	int fd, fd_s, ctl_fd;
+	int sk_bsize;
+	int pfd[2];
+	pid_t pid;
+
+	test_init(argc, argv);
 
 	if (pipe(pfd)) {
 		err("pipe() failed");
 		return 1;
 	}
 
-	extpid = fork();
-	if (extpid < 0) {
+	pid = test_fork();
+	if (pid < 0) {
 		err("fork() failed");
 		return 1;
-	} else if (extpid == 0) {
+	} else if (pid == 0) {
 		int size;
 		char c;
-
-		test_ext_init(argc, argv);
 
 		close(pfd[1]);
 		if (read(pfd[0], &port, sizeof(port)) != sizeof(port)) {
@@ -144,7 +140,7 @@ int main(int argc, char **argv)
 			return 1;
 		}
 
-		size = clean_sk_buf(fd);
+		size = read_sock_buf(fd);
 		if (size < 0)
 			return 1;
 
@@ -153,8 +149,6 @@ int main(int argc, char **argv)
 
 		return 0;
 	}
-
-	test_init(argc, argv);
 
 	if ((fd_s = tcp_init_server(ZDTM_FAMILY, &port)) < 0) {
 		err("initializing server failed");
@@ -219,8 +213,7 @@ int main(int argc, char **argv)
 		return 1;
 	}
 
-	rcv_size = clean_sk_buf(fd);
-
+	rcv_size = read_sock_buf(fd);
 	if (ret != rcv_size) {
 		fail("The child sent %d bytes, but the parent received %d bytes\n", ret, rcv_size);
 		return 1;
